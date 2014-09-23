@@ -1,0 +1,17 @@
+This is the code repo for the Trello Board Snapshot plugin available in the Chrome Web Store here:
+
+https://chrome.google.com/webstore/detail/trello-board-snapshot/dgafpbcbieanmcihbjgaicikfchngpff
+
+Feel free to report any issues or feedback here.
+
+Patches welcome.
+
+
+Project Description:
+
+Provides ability to copy all curent cards on a board into checklists on a single card.
+This extension grew out if the need to keep track of multiple cards that exist on multiple boards. For us, all of the work to be done is staged on one specific board, then that work is sent out to smaller teams to actually complete the work. With this extension, it is possible to create a snapshot of the central board before all of the cards are sent out to the team boards. All the cards can then be followed up on at a later date, regardless of where the card happens to be.
+
+Currently, the user is required to manually create a list titled 'Board Snapshots' which will then be populated with a card containing checklists of all the visible cards on the board. Each checklist item is a link that will function no matter where the card goes, so long as the user clicking the link has access to the board where the card now resides.
+
+Please share any feedback or requests through comments here in the store. I am open to updating the extension if there is a use for it in the community.
