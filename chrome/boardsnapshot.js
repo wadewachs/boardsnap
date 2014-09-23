@@ -1,20 +1,17 @@
 /*!
- * TrelloExport
- * https://github.com/llad/export-for-trello
- *
+ * BoardSnapshot
+ * https://github.com/wadewachs/boardsnap
+ * 
  * Credit:
- * Started from: https://github.com/Q42/TrelloScrum
+ * started from https://github.com/llad/export-for-trello
+ *
  */
-
-/*jslint browser: true, devel: false*/
 
 
 var $;
 
 var $snapshot_btn,
     addInterval;
-
-//window.URL = window.webkitURL || window.URL;
 
 
 var createSnapshot = function() {
