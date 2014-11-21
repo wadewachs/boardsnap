@@ -23,9 +23,8 @@ var createSnapshot = function() {
 			}
 		};
 		if(!snapshotList) {
-			alert("Please manually create a new list called 'Board Snapshots' then try again");
-			//Trello.post("lists", {name:"Board Snapshots", idBoard:boardId, pos:"bottom"}
-		//TODO - implelment auto creation of list if not exists
+			Trello.post("lists", {name:"Board Snapshots", idBoard:board.id, pos:"bottom"}, createSnapshot);
+			return;
 		}
 		var d = Date();
 		
@@ -76,15 +75,24 @@ function addSnapshotLink() {
 				'title': 'Create a snapshot card of the board'
 			})
 			.text('Board Snapshot')
-			.click(createSnapshot)
+			.click(authorize)
 			.insertAfter($js_btn.parent())
 			.wrap(document.createElement("li"));
     
 	}
 }
-var onAuthorize = function () {
-	$(document).on('mouseup', ".js-toggle-widget-nav", function () {
-		addInterval = setInterval(addSnapshotLink, 50);
+var authorize = function () {
+	Trello.authorize({
+		interactive:false,
+		success:createSnapshot,
+		error: function () {  Trello.authorize({
+			interactive:true,
+			name: "Board Snapshot",
+			scope: {read: true, write: true, account: false},
+			expiration: "never",
+			type: "popup",
+			success: createSnapshot
+		})}
 	});
 }
 
@@ -93,14 +101,9 @@ $(function () {
     "use strict";
     // Look for clicks on the .js-toggle-widget-nav class, which is
     // the "Menu" link on the board header option list
+    $(document).on('mouseup', ".js-toggle-widget-nav", function () {
+        addInterval = setInterval(addSnapshotLink, 50);
+    });
 
 
-	Trello.authorize({
-		interactive:true,
-		name: "Board Snapshot",
-		scope: {read: true, write: true, account: false},
-		expiration: "never",
-		type: "popup",
-		success: onAuthorize
-	});
 });
