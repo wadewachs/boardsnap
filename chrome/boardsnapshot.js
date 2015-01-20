@@ -85,7 +85,15 @@ function addSnapshotLink() {
 }
 
 function listSnapshot () {
-	console.log(listCard.substr(3,8));
+	if (!listCard) {
+		alert("There are no cards in this list.");
+		return;
+	}
+	var cardId = listCard.substr(3,8);
+
+	Trello.get("cards/" + cardId, {fields:"list"}, function (results) {
+		console.log(results);
+	});
 	
 
 }
