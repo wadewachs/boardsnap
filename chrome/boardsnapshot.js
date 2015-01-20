@@ -10,8 +10,10 @@
 
 var $;
 
-var $snapshot_btn,
-    addInterval;
+var $list_snapshot_btn,
+	$board_snapshot_btn,
+    addInterval,
+	listCard;
 
 
 var createSnapshot = function() {
@@ -67,7 +69,7 @@ function addSnapshotLink() {
     
     // The new link/button
 	if ($js_btn.length) {
-		$snapshot_btn = $('<a>')
+		$board_snapshot_btn = $('<a>')
 			.attr({
 				'class': 'js-board-snapshot nav-list-item nav-list-sub-item',
 				'href': '#',
@@ -81,6 +83,46 @@ function addSnapshotLink() {
     
 	}
 }
+
+function listSnapshot () {
+	console.log(listCard.substr(3,8));
+	
+
+}
+
+
+function addListSnapshotLink() {
+
+
+	"use strict";
+	var $js_btn = $('a.js-list-subscribe'); // List Actions > Subscribe link
+    
+	// See if our link is already there
+	if ($('.pop-over-list').find('.js-list-snapshot').length) {
+		clearInterval(addInterval);
+		return;
+	}
+    
+    // The new link/button
+	if ($js_btn.length) {
+	
+		$list_snapshot_btn = $('<a>')
+			.attr({
+				'class': 'js-list-snapshot',
+				'href': '#',
+				'target': '_blank',
+				'title': 'Create a snapshot card of this list'
+			})
+			.text('Create List Snapshot')
+			.click(listSnapshot)
+			.insertAfter($js_btn.parent())
+			.wrap(document.createElement("li"));
+	}
+}
+
+
+
+
 var authorize = function () {
 	Trello.authorize({
 		interactive:false,
@@ -105,5 +147,9 @@ $(function () {
         addInterval = setInterval(addSnapshotLink, 50);
     });
 
+    $(document).on('mouseup', ".list-header-menu-icon", function () {
+		listCard = $(this).parent().next().children("div:nth-child(1)").children("div.list-card-details").children("a.list-card-title").attr('href');
+        addInterval = setInterval(addListSnapshotLink, 50);
+    });
 
 });
