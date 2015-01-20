@@ -17,6 +17,7 @@ var $list_snapshot_btn,
 
 
 var createSnapshot = function() {
+	authorize();
 	var boardId = window.location.pathname.substr(3,8);
     Trello.boards.get(boardId,{lists:"all", cards:"visible", card_fields:"url,name,idList,pos", fields:"name", list_fields:"name,closed,pos"}, function(board) {
 		for (var i=0; i<board.lists.length; i++) {
@@ -77,7 +78,7 @@ function addSnapshotLink() {
 				'title': 'Create a snapshot card of the board'
 			})
 			.text('Board Snapshot')
-			.click(authorize)
+			.click(createSnapshot)
 			.insertAfter($js_btn.parent())
 			.wrap(document.createElement("li"));
     
@@ -89,10 +90,26 @@ function listSnapshot () {
 		alert("There are no cards in this list.");
 		return;
 	}
+	authorize();
 	var cardId = listCard.substr(3,8);
 
-	Trello.get("cards/" + cardId, {fields:"list"}, function (results) {
-		console.log(results);
+	Trello.get("cards/" + cardId, {fields:"name", list:"true"}, function (results) {
+		var listName = results.list.name;
+		var listId = results.list.id;
+		Trello.get("lists/" + listId, {cards:"open", card_fields:"url,pos"}, function(results) {
+			var cards = results.cards;
+			Trello.post("cards/", {name:listName + " - Snapshot " + Date().toString().substr(4,21), pos:"top", idList:listId, urlSource:null}, function (results) {
+				Trello.post("checklists/", {name:listName, idCard:results.id, pos:"top"}, function (results) {
+					var checklist = results.id;
+					for (var i=0; i<cards.length; i++) {
+//						ddconsole.log("Add " + cards[i].url + " the the list");
+						Trello.post("checklists/" + checklist + "/checkItems", {name:cards[i].url, pos:cards[i].pos}, function(results) {
+
+						});
+					}
+				});
+			});
+		});
 	});
 	
 
@@ -134,7 +151,6 @@ function addListSnapshotLink() {
 var authorize = function () {
 	Trello.authorize({
 		interactive:false,
-		success:createSnapshot,
 		error: function () {  Trello.authorize({
 			interactive:true,
 			name: "Board Snapshot",
