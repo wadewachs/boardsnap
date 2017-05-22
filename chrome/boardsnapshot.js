@@ -63,24 +63,28 @@ function addSnapshotLink() {
 	var $js_btn = $('a.js-copy-board'); // Export JSON link
     
 	// See if our link is already there
-	if ($('.nav-list').find('.js-board-snapshot').length) {
+	if ($('.board-menu-navigation').find('.js-board-snapshot').length) {
 		clearInterval(addInterval);
 		return;
 	}
     
     // The new link/button
+	var $li_wrap = document.createElement("li");
+	$li_wrap.className = 'board-menu-navigation-item';
+	
 	if ($js_btn.length) {
 		$board_snapshot_btn = $('<a>')
 			.attr({
-				'class': 'js-board-snapshot nav-list-item nav-list-sub-item',
+				'class': 'board-menu-navigation-item-link js-board-snapshot nav-list-item nav-list-sub-item',
 				'href': '#',
 				'target': '_blank',
 				'title': 'Create a snapshot card of the board'
 			})
-			.text('Board Snapshot')
+			.text(' Board Snapshot')
 			.click(createSnapshot)
 			.insertAfter($js_btn.parent())
-			.wrap(document.createElement("li"));
+			.prepend('<span class="icon-sm icon-card-cover board-menu-navigation-item-link-icon"></span>')
+			.wrap($li_wrap);
     
 	}
 }
@@ -167,11 +171,11 @@ $(function () {
     "use strict";
     // Look for clicks on the .js-toggle-widget-nav class, which is
     // the "Menu" link on the board header option list
-    $(document).on('mouseup', ".js-toggle-widget-nav", function () {
+    $(document).on('mouseup', ".js-show-sidebar", function () {
         addInterval = setInterval(addSnapshotLink, 50);
     });
 
-    $(document).on('mouseup', ".list-header-menu-icon", function () {
+    $(document).on('mouseup', ".list-header-extras", function () {
 		listCard = $(this).parent().next().children("div:nth-child(1)").children("div.list-card-details").children("a.list-card-title").attr('href');
         addInterval = setInterval(addListSnapshotLink, 50);
     });
